@@ -1,0 +1,34 @@
+pipeline:
+  name: Maven-Build-Pipeline
+  identifier: maven_build_pipeline
+  projectIdentifier: sample_project
+  orgIdentifier: default
+  stages:
+    - stage:
+        name: Build
+        identifier: build_stage
+        type: CI
+        spec:
+          cloneCodebase: true
+
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Build with Maven
+                  identifier: maven_build
+                  spec:
+                    shell: Sh
+                    image: maven:3.9.6-eclipse-temurin-17
+                    command: |
+                      mvn clean install
+
+              - step:
+                  type: Run
+                  name: List Artifacts
+                  identifier: list_artifacts
+                  spec:
+                    shell: Sh
+                    image: alpine
+                    command: |
+                      ls -l target/
